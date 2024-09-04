@@ -9,3 +9,159 @@ info:
 servers:
   - url: /api
     description: Local development server
+
+paths:
+  /posts:
+    get:
+      tags:
+        - posts
+      summary: Returns all posts and associated keywords.
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - posts
+      summary: Create a new post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              title: My new post
+              description: A brief description of what my new post is about.
+              body: Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis expedita quisquam, enim id consequuntur minima eaque dolor vel voluptate cumque odio dolores ad assumenda sint. Nesciunt tempora odit rerum explicabo!
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+
+  /posts/{postId}:
+    get:
+      tags:
+        - posts
+      summary: Get content and metadata (not keywords) of a single post.
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          default: 1
+    put:
+      tags:
+        - posts
+      summary: Update content and metadata (not keywords) of a single post.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          default: 99
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              title: My updated post
+              description: An updated description of my post.
+              body: Updated lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore asperiores eum, quasi ipsam minus nihil! Neque porro labore nulla sit voluptate? Debitis quae ex neque optio! Maxime maiores expedita molestiae.
+    delete:
+      tags:
+        - posts
+      summary: Delete a single post (and all associated keywords).
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          default: 99
+      responses:
+        '204':
+          description: No Content
+
+  /keywords:
+    get:
+      tags:
+        - keywords
+      summary: Get a list of all keywords.
+      responses:
+        '200':
+          description: OK
+
+  /keywords/{keyword}:
+    get:
+      tags:
+        - keywords
+      summary: Get all post ids associated with a single keyword.
+      parameters:
+        - name: keyword
+          in: path
+          required: true
+          default: animal
+      responses:
+        '200':
+          description: OK
+
+  /posts/{postId}/keywords:
+    get:
+      tags:
+        - keywords
+      summary: Get all keywords associated with a single post.
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          default: 1
+    post:
+      tags:
+        - keywords
+      summary: Associate a keyword with a post.
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          default: 99
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              keyword: new-keyword
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+
+  /posts/{postId}/keywords/{keyword}:
+    delete:
+      tags:
+        - keywords
+      summary: Remove an associated keyword from a post.
+      parameters:
+        - in: path
+          name: postId
+          required: true
+        - in: path
+          name: keyword
+          required: true
+      responses:
+        '204':
+          description: Not Found
