@@ -1,0 +1,11 @@
+openapi: 3.0.0
+info:
+  title: Simple content management system
+  description: A REST API-driven CMS built on Express, backed with SQLite (via Sequelize)
+  version: 0.0.0
+  contact:
+    name: Repo
+    url: http://github.com/chrjl/cms-express-sequelize
+servers:
+  - url: /api
+    description: Local development server
