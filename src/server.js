@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(logger('dev'));
 app.use('/public', express.static('public'));
 app.use('/api-docs', routes.apiDocs);
+app.use('/api', routes.api);
 
 app.use((err, req, res, next) => {
   const { status, message } = err;
