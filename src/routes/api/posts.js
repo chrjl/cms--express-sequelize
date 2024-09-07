@@ -36,14 +36,25 @@ router
 
 router
   .route('/:postId')
-  .get(async (req, res, next) => {
+  .all(async (req, res, next) => {
     const post = await Post.findByPk(req.params.postId);
 
-    if (post === null) {
+    if (post === null && req.method !== 'DELETE') {
       return next(createHttpError(404));
     }
 
-    res.json(post);
+    res.locals.post = post;
+    next();
+  })
+  .get(async (req, res) => {
+    res.json(res.locals.post);
+  })
+  .put(async (req, res, next) => {
+    const id = req.params.postId;
+    const { title, description, body } = req.body;
+
+    await Post.update({ title, description, body }, { where: { id } });
+    res.sendStatus(200);
   })
   .delete(async (req, res) => {
     await Post.destroy({
